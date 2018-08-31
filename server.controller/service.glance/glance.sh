@@ -1,27 +1,24 @@
 # OpenStack > Controller - Glance
-source ~/admin-openrc
 
-	- 於 Controller (Keystone 服務) 中建立 keystone 中的使用者 glance，並設定密碼。
-		- `openstack user create glance --domain default --password-prompt`
-	- 將 role: admin 加入 project: service 與 user: glance
-		- `openstack role add admin --project service --user glance` 
-	
-	- 於 Controller (Keystone 服務) 中建立 glance 的服務實體 (Instance)
-		- `openstack service create image --name glance --description "OpenStack Image Service"`
-	
-	- 於 Controller (Keystone 服務) 中建立 glance 的三個服務端點 (Endpoint)
-	*Note: 三個服務端點共用 TCP 9292*
-		- `openstack endpoint create image --region RegionOne public http://controller:9292`
-			- image -> service name
-			- public -> interface
-		- `openstack endpoint create image --region RegionOne internal http://controller:9292`
-			- internal -> interface
-		- `openstack endpoint create image --region RegionOne admin http://controller:9292`
-			- admin -> interface 
+source ./admin-openrc
 
-- **於 Controller 上安裝 glance 服務**
-	- [OpenStack Docs: Install and configure (Ubuntu)](https://docs.openstack.org/glance/queens/install/install-ubuntu.html)
-	`apt install glance`
+# Create user glance on keystone
+echo 'The glance user password is "GLANCE_PASS"'
+openstack user create glance --domain default --password-prompt
+
+# Add  role admin to project service and user glance on keystone
+openstack role add admin --project service --user glance
+
+# Create service image on keystone
+openstack service create image --name glance --description "OpenStack Image Service"
+
+# Create endpoint public, internal, admin on keystone
+openstack endpoint create image --region RegionOne public http://controller:9292
+openstack endpoint create image --region RegionOne internal http://controller:9292
+openstack endpoint create image --region RegionOne admin http://controller:9292`
+
+# Install glance servic3
+apt install glance
 	 1. 編輯 glance 服務組態檔 `/etc/glance/glance-api.conf`
 	 `cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk`
 		 1. 設定 database 連線方式
