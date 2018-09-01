@@ -6,17 +6,28 @@ source ./admin-openrc
 apt install -y glance
 
 # Backup the origin file
-if [ -f "/etc/keystone/keystone.conf" ]
+if [ -f "/etc/glance/glance-api.conf.bk" ]
 then
-	echo "The backup keystone conf exist, do not thing."
+	echo "The backup glance-api conf exist, do not thing."
 else
-	echo "Backup the keystone conf file."
+	echo "Backup the glance-api conf file."
 	cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk
 	cp -af glance-api.conf /etc/glance/glance-api.conf
 fi
 
+if [ -f "/etc/glance/glance-registry.conf.bk" ]
+then
+	echo "The backup glance-registry conf exist, do not thing."
+else
+	echo "Backup the glance-registry conf file."
+	cp -a /etc/glance/glance-registry.conf /etc/glance/glance-registry.conf.bk
+	cp -af glance-registry.conf /etc/glance/glance-registry.conf
+fi
+
 
 :'
+# Modify the glance-api conf
+
 1. Setting the connection for database
 # 1924
 [database]
@@ -35,8 +46,8 @@ filesystem_store_datadir = /var/lib/glance/images
 disk_formats = ami,ari,aki,vhd,vhdx,vmdk,raw,qcow2,vdi,iso,ploop.root-tar
 
 4. Setting the authentication information for keystone
-# 3474 <-- Insert these configuration after this line
-[keystone_authtoken]
+# 3474
+[keystone_authtoken] <-- Insert these configuration after this line
 www_authenticate_uri = http://controller:5000
 auth_url = http://controller:5000
 memcached_servers = controller:11211
@@ -52,21 +63,18 @@ password = GLANCE_PASS
 [paste_deploy]
 flavor = keystone
 '
-break
 
-	2. 編輯 glance 註冊組態檔 `/etc/glance/glance-registry.conf`
-	`cp -a /etc/glance/glance-registry.conf /etc/glance/glance-registry.conf.bk`
-		 1. 設定 database 連線方式
-```
-#1170
+:'
+# Modify the glance-registry conf: /etc/glance/glance-registry.conf
+
+1. Setting the connection for database
+# 1170
 [database] 
 connection = mysql+pymysql://glance:GLANCE_DBPASS@controller/glance
-```
-		 2. 設定 keystone 的驗證資訊
-```
-#1287
-[keystone_authtoken]
-#於此行後插入以下組態
+
+2. Setting the authentication for keystone
+# 1287
+[keystone_authtoken] <-- Insert these configuration after this line
 www_authenticate_uri = http://controller:5000
 auth_url = http://controller:5000
 memcached_servers = controller:11211
@@ -76,23 +84,24 @@ user_domain_name = Default
 project_name = service
 username = glance
 password = GLANCE_PASS
-```
-		 3. 設定 paste_deploy
-```
+
+3. Setting the paste_deploy
+# 2275
 [paste_deploy]
 flavor = keystone
-```
+'
 
-	 3. 使用 glance-manage 對資料庫做同步化 (建立資料表、欄位、基礎資料…等)
-	`glance-manage db_sync`
-	4. 重新啟動 glance 註冊服務
-	`systemctl restart glance-registry.service`
-	5. 重新啟動 glance 服務
-	`systemctl restart glance-api.service`
+# Synchronizee the database by glance-manage (Create table, schema, data...)
+glance-manage db_sync
 
- 6. 上傳 image 到 glance server  (Controller)
-`wget http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img`
-```
+# Restart the glance-registry service
+systemctl restart glance-registry.service
+# Restart the glance-api service
+systemctl restart glance-api.service
+
+# Upload image (Cirros) to glance service (controller)
+wget http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+
 openstack image create "cirros" --file cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --public
-```
- `openstack image list`
+
+openstack image list
