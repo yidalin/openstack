@@ -1,7 +1,9 @@
-# OpenStack > Controller - Keystone Service
+# Controller - Keystone Service
 
 # Install Keystone service
 apt install -y keystone apache2 libapache2-mod-wsgi python-openstackclient
+
+# Install the bash completion for OpenStack command
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
 cp -af keystone.conf /etc/keystone/keystone.conf
@@ -36,7 +38,7 @@ keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
 cp -af apache2.conf /etc/apache2/apache2.conf
 systemctl restart apache2.service
 
-
+# Export the temporary environment variables
 export OS_USERNAME=admin
 export OS_PASSWORD=ADMIN_PASS
 export OS_PROJECT_NAME=admin
@@ -45,8 +47,11 @@ export OS_PROJECT_DOMAIN_NAME=Default
 export OS_AUTH_URL=http://controller:5000/v3/
 export OS_IDENTITY_API_VERSION=3
 
+
+# Create project (service, demo) on the keystone service
 openstack project create service --domain default --description "Service Project"
 openstack project create demo --domain default --description "Demo Project"
+
 echo 'The next answer is "DEMO_PASS"'
 openstack user create demo --domain default --password-prompt
 openstack role create user
