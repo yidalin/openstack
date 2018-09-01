@@ -1,0 +1,23 @@
+[DEFAULT]
+[cors]
+[database]
+connection = sqlite:////var/lib/glance/glance.sqlite
+backend = sqlalchemy
+[glance_store]
+[image_format]
+disk_formats = ami,ari,aki,vhd,vhdx,vmdk,raw,qcow2,vdi,iso,ploop.root-tar
+[keystone_authtoken]
+[matchmaker_redis]
+[oslo_concurrency]
+[oslo_messaging_amqp]
+[oslo_messaging_kafka]
+[oslo_messaging_notifications]
+[oslo_messaging_rabbit]
+[oslo_messaging_zmq]
+[oslo_middleware]
+[oslo_policy]
+[paste_deploy]
+[profiler]
+[store_type_location_strategy]
+[task]
+[taskflow_executor]
