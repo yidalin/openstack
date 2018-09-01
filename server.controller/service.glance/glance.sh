@@ -1,51 +1,42 @@
-# OpenStack > Controller - Glance
+# Controller - Glance
 
 source ./admin-openrc
 
-# Create user glance on keystone
-echo 'The glance user password is "GLANCE_PASS"'
-openstack user create glance --domain default --password-prompt
-
-# Add  role admin to project service and user glance on keystone
-openstack role add admin --project service --user glance
-
-# Create service image on keystone
-openstack service create image --name glance --description "OpenStack Image Service"
-
-# Create endpoint public, internal, admin on keystone
-openstack endpoint create image --region RegionOne public http://controller:9292
-openstack endpoint create image --region RegionOne internal http://controller:9292
-openstack endpoint create image --region RegionOne admin http://controller:9292`
-
-# Install glance servic3
+# Install glance service
 apt install -y glance
 
-# Modify the glance service configuration /etc/glance/glance-api.conf
-#cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk
-		 1. 設定 database 連線方式
-```
-#1924
+# Backup the origin file
+if [ -f "/etc/keystone/keystone.conf" ]
+then
+	echo "The backup keystone conf exist, do not thing."
+else
+	echo "Backup the keystone conf file."
+	cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk
+	cp -af glance-api.conf /etc/glance/glance-api.conf
+fi
+
+
+:'
+1. Setting the connection for database
+# 1924
 [database]
 connection = mysql+pymysql://glance:GLANCE_DBPASS@controller/glance
-```
-		 2. 設定 glance image 儲存方式
-```	
+
+2. Setting the store method for glance image
 # 2041
 [glance_store]
 stores = file,http
 default_store = file
 filesystem_store_datadir = /var/lib/glance/images
-```
-		 4. 設定 glance 支援的 image 格式
-```
+
+3. Setting the support image format for glance
+# 3459
 [image_format]
 disk_formats = ami,ari,aki,vhd,vhdx,vmdk,raw,qcow2,vdi,iso,ploop.root-tar
-```
-		 5. 設定 keystone 的驗證資訊
-```
-#3474
+
+4. Setting the authentication information for keystone
+# 3474 <-- Insert these configuration after this line
 [keystone_authtoken]
-#於此行後插入以下組態
 www_authenticate_uri = http://controller:5000
 auth_url = http://controller:5000
 memcached_servers = controller:11211
@@ -55,12 +46,13 @@ user_domain_name = Default
 project_name = service
 username = glance
 password = GLANCE_PASS
-```
-		 6. 設定 paste_deploy
-```
+
+5. Setting the paste_deploy
+# 4489
 [paste_deploy]
 flavor = keystone
-```	 
+'
+break
 
 	2. 編輯 glance 註冊組態檔 `/etc/glance/glance-registry.conf`
 	`cp -a /etc/glance/glance-registry.conf /etc/glance/glance-registry.conf.bk`
