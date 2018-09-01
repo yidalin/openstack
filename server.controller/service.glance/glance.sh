@@ -19,8 +19,9 @@ openstack endpoint create image --region RegionOne admin http://controller:9292`
 
 # Install glance servic3
 apt install -y glance
-	 1. 編輯 glance 服務組態檔 `/etc/glance/glance-api.conf`
-	 `cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk`
+
+# Modify the glance service configuration /etc/glance/glance-api.conf
+#cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk
 		 1. 設定 database 連線方式
 ```
 #1924
