@@ -16,7 +16,7 @@ nova-manage api_db sync
 nova-manage cell_v2 map_cell0
 
 # Create cell1
-nova-manage cell_v2 create_cell --name=cell1 --verbose 1abb8283-8e53-4e95-a0f2-c535e3821aa9
+nova-manage cell_v2 create_cell --name=cell1 --verbose
 
 # Confirm that cell0 and cell1 created.
 nova-manage cell_v2 list_cells
@@ -25,12 +25,16 @@ nova-manage cell_v2 list_cells
 nova-manage db sync
 
 # Restart nova-api service
+systemctl restart nova-api.service
 
 # Restart nova-consoleauth service
+systemctl restart nova-consoleauth.service
 
 # Restart nova-scheduler service
+systemctl restart nova-scheduler.service
 
 # Restart nova-conductor service
+systemctl restart nova-conductor.service
 
 # Restart nova-novncproxy service
-
+systemctl restart nova-novncproxy.service
