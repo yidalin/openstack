@@ -38,3 +38,23 @@ systemctl restart nova-conductor.service
 
 # Restart nova-novncproxy service
 systemctl restart nova-novncproxy.service
+
+
+### Please implement after deployed nova compute server
+## Setting the Hypervisor
+source /root/openstack/admin-openrc
+
+# Check the hypervisor
+openstack compute service list --service nova-compute
+
+# Add compute1 node to ... 
+nova-manage cell_v2 discover_hosts --verbose
+
+source none-openrc
+
+
+# Verify and test the nova service
+source admin-openrc
+
+
+
