@@ -1,10 +1,12 @@
-
 [DEFAULT]
 log_dir = /var/log/nova
 lock_path = /var/lock/nova
 state_path = /var/lib/nova
+my_ip = 192.168.212.93
+transport_url = rabbit://openstack:RABBIT_PASS@controller 
 
 [api]
+auth_strategy = keystone
 
 [api_database]
 connection = sqlite:////var/lib/nova/nova_api.sqlite
@@ -14,7 +16,7 @@ connection = sqlite:////var/lib/nova/nova_api.sqlite
 [cache]
 
 [cells]
-enable = False
+#enable = False
 
 [cinder]
 
@@ -40,6 +42,7 @@ connection = sqlite:////var/lib/nova/nova.sqlite
 [filter_scheduler]
 
 [glance]
+api_servers = http://controller:9292 
 
 [guestfs]
 
@@ -54,6 +57,15 @@ connection = sqlite:////var/lib/nova/nova.sqlite
 [keystone]
 
 [keystone_authtoken]
+www_authenticate_uri = http://controller:5000
+auth_url = http://controller:5000
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = nova
+password = NOVA_PASS
 
 [libvirt]
 
@@ -70,6 +82,7 @@ connection = sqlite:////var/lib/nova/nova.sqlite
 [osapi_v21]
 
 [oslo_concurrency]
+lock_path = /var/lib/nova/tmp 
 
 [oslo_messaging_amqp]
 
@@ -88,7 +101,14 @@ connection = sqlite:////var/lib/nova/nova.sqlite
 [pci]
 
 [placement]
-os_region_name = openstack
+os_region_name = RegionOne
+auth_type = password
+auth_url = http://controller:5000/v3
+project_name = service
+project_domain_name = Default
+username = placement
+user_domain_name = Default
+password = PLACEMENT_PASS 
 
 [quota]
 
@@ -113,6 +133,10 @@ os_region_name = openstack
 [vmware]
 
 [vnc]
+enabled = true
+server_listen = 0.0.0.0
+server_proxyclient_address = $my_ip
+novncproxy_base_url = http://controller:6080/vnc_auto.html
 
 [workarounds]
 
