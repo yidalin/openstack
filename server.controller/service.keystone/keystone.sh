@@ -147,4 +147,21 @@ openstack endpoint create placement --region RegionOne public http://controller:
 openstack endpoint create placement --region RegionOne internal http://controller:8778
 openstack endpoint create placement --region RegionOne admin http://controller:8778
 
+# Create user cinder on keystone
+echo 'The cinder user password is "CINDER_PASS"'
+#openstack user create cinder --domain default --password-prompt
+openstack user create cinder --domain default --password CINDER_PASS
+# Add  role admin to project service and user cinder on keystone
+openstack role add admin --project service --user cinder
+# Create block storage service (cinder) on keystone
+openstack service create volumev2 --name cinderv2 --description "OpenStack Block Storage"
+openstack service create volumev3 --name cinderv3 --description "OpenStack Block Storage"
 
+# Create endpoint public, internal, admin on keystone
+openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(project_id\)s
+
+openstack endpoint create --region RegionOne volumev3 public http://controller:8776/v3/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev3 internal http://controller:8776/v3/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev3 admin http://controller:8776/v3/%\(project_id\)s
