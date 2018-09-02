@@ -106,14 +106,45 @@ export PS1='\u@\h:\w\$ '
 EOF
 
 source /root/admin-openrc
+
+## Image service ##
 # Create user glance on keystone
 echo 'The glance user password is "GLANCE_PASS"'
 openstack user create glance --domain default --password-prompt
 # Add  role admin to project service and user glance on keystone
 openstack role add admin --project service --user glance
-# Create service image on keystone
+# Create image service (glance) on keystone
 openstack service create image --name glance --description "OpenStack Image Service"
 # Create endpoint public, internal, admin on keystone
 openstack endpoint create image --region RegionOne public http://controller:9292
 openstack endpoint create image --region RegionOne internal http://controller:9292
 openstack endpoint create image --region RegionOne admin http://controller:9292
+
+## Compute service ##
+# Create user nova on keystone
+echo 'The nova user password is "NOVA_PASS"'
+#openstack user create nova --domain default --password-prompt
+openstack user create nova --domain default --password NOVA_PASS
+# Add  role admin to project service and user nova on keystone
+openstack role add admin --project service --user nova
+# Create compute service (nova) on keystone
+openstack service create compute --name nova --description "OpenStack Compute Service"
+# Create endpoint public, internal, admin on keystone
+openstack endpoint create compute --region RegionOne public http://controller:8774/v2.1
+openstack endpoint create compute --region RegionOne internal http://controller:8774/v2.1
+openstack endpoint create compute --region RegionOne admin http://controller:8774/v2.1
+
+# Create user placement on keystone
+echo 'The placement user password is "PLACEMENT_PASS"'
+#openstack user create placement --domain default --password-prompt
+openstack user create placement --domain default --password PLACEMENT_PASS
+# Add  role admin to project service and user placement on keystone
+openstack role add admin --project service --user placement
+# Create compute service (placement) on keystone
+openstack service create placement --name placement --description "OpenStack Placement API"
+# Create endpoint public, internal, admin on keystone
+openstack endpoint create placement --region RegionOne public http://controller:8778
+openstack endpoint create placement --region RegionOne internal http://controller:8778
+openstack endpoint create placement --region RegionOne admin http://controller:8778
+
+
