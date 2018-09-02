@@ -20,6 +20,7 @@ connection = mysql+pymysql://nova:NOVA_DBPASS@controller/nova_api
 #enable = False
 
 [cinder]
+os_region_name = RegionOne
 
 [compute]
 
