@@ -19,6 +19,7 @@ connection = sqlite:////var/lib/nova/nova_api.sqlite
 #enable = False
 
 [cinder]
+os_region_name = RegionOne
 
 [compute]
 
