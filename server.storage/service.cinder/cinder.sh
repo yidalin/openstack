@@ -20,3 +20,13 @@ devices {
 # Install cinder packages
 apt install -y cinder-volume tgt
 
+# Replace the cinder conf
+cp -af cinder.conf.no-comment /etc/cinder/cinder.conf
+
+# Restart tgt (iSCSI target) service
+systemctl restart tgt.service
+systemctl status tgt.service
+
+# Restart cinder-volume service
+systemctl restart cinder-volume.service
+systemctl status cinder-volume.service
