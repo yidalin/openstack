@@ -1,4 +1,3 @@
-
 [DEFAULT]
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_confg = /etc/cinder/api-paste.ini
