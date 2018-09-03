@@ -28,4 +28,10 @@ project_domain_name = Default
 user_domain_name = Default
 project_name = service
 username = cinder
-password = CINDER_PASS 
+password = CINDER_PASS
+
+
+
+# Establish cinder block volume (Use demo account)
+openstack volume create demoVol --size 1 --description "Demo's volume"
+
