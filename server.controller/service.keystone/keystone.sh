@@ -165,3 +165,16 @@ openstack endpoint create --region RegionOne volumev2 admin http://controller:87
 openstack endpoint create --region RegionOne volumev3 public http://controller:8776/v3/%\(project_id\)s
 openstack endpoint create --region RegionOne volumev3 internal http://controller:8776/v3/%\(project_id\)s
 openstack endpoint create --region RegionOne volumev3 admin http://controller:8776/v3/%\(project_id\)s
+
+# Create user neutron on keystone
+echo 'The neutron user password is "NEUTRON_PASS"'
+#openstack user create neutron --domain default --password-prompt
+openstack user create neutron --domain default --password NEUTRON_PASS
+# Add  role admin to project service and user neutron on keystone
+openstack role add admin --project service --user neutron
+# Create network service (neutron) on keystone
+openstack service create network --name neutron --description "OpenStack Network Service"
+# Create endpoint public, internal, admin on keystone
+openstack endpoint create neutron --region RegionOne public http://controller:9696
+openstack endpoint create neutron --region RegionOne internal http://controller:9696
+openstack endpoint create neutron --region RegionOne admin http://controller:9696
