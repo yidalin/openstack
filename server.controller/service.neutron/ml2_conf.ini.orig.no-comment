@@ -1,9 +1,12 @@
-
 [DEFAULT]
 
 [l2pop]
 
 [ml2]
+type_drivers = local,flat,vlan,gre,vxlan,geneve
+tenant_network_types = vxlan
+mechanism_drivers = linuxbridge,l2population
+extension_drivers = port_security
 
 [ml2_type_flat]
 
@@ -14,5 +17,7 @@
 [ml2_type_vlan]
 
 [ml2_type_vxlan]
+vni_ranges = 1:1000
 
 [securitygroup]
+enable_ipset = true
