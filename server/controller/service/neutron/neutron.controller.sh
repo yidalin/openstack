@@ -9,3 +9,16 @@ neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neu
 
 systemctl restart nova-api.service
 systemctl restart neutron-server.service
+
+## Create External network
+# Cteate ext-net external network (flat)
+openstack network create ext-net --external --provider-physical-network external --provider-network-type flat
+# Create a subnet for ext-net
+
+
+# Use demo account
+openstack network create demo-net
+openstack subnet create demo-subnet --network demo-net --subnet-range 192.168.0.0/24 --dns-nameserver 8.8.8.8 --gateway 192.168.0.1
+openstack router create demo-router
+openstack router add subnet demo-router demo-subnet
+openstack router set demo-router --external-gateway ext-net
