@@ -4,7 +4,8 @@
 apt install -y mariadb-server python-pymysql
 
 # Create DB connection file
-cp -af ./99-openstack.cnf /etc/mysql/mariadb.conf.d/99-openstack.cnf
+cp -af /root/openstack/server/controller/service/database/99-openstack.cnf \
+/etc/mysql/mariadb.conf.d/99-openstack.cnf
 
 : '
 cat << EOF > /etc/mysql/mariadb.conf.d/99-openstack.cnf
