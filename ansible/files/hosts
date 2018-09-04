@@ -11,4 +11,4 @@ ff02::2 ip6-allrouters
 192.168.8.31 storage1
 192.168.8.41 network1
 
-192.168.212.91 jumpbox
+192.168.8.91 jumpbox
