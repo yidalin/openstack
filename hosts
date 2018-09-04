@@ -6,7 +6,9 @@
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
-192.168.212.91	controller
-192.168.212.92	compute1
-192.168.212.93	storage1
-192.168.212.94	network1
+192.168.8.11 controller
+192.168.8.21 compute1
+192.168.8.31 storage1
+192.168.8.41 network1
+
+192.168.212.91 jumpbox
