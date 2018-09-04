@@ -5,26 +5,6 @@ source ./admin-openrc
 # Install glance service
 apt install -y glance
 
-# Backup the origin file
-if [ -f "/etc/glance/glance-api.conf.bk" ]
-then
-	echo "The backup glance-api conf exist, do not thing."
-else
-	echo "Backup the glance-api conf file."
-	cp -a /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bk
-	cp -af glance-api.conf /etc/glance/glance-api.conf
-fi
-
-if [ -f "/etc/glance/glance-registry.conf.bk" ]
-then
-	echo "The backup glance-registry conf exist, do not thing."
-else
-	echo "Backup the glance-registry conf file."
-	cp -a /etc/glance/glance-registry.conf /etc/glance/glance-registry.conf.bk
-	cp -af glance-registry.conf /etc/glance/glance-registry.conf
-fi
-
-
 :'
 # Modify the glance-api conf
 

@@ -6,18 +6,7 @@ apt install -y keystone apache2 libapache2-mod-wsgi python-openstackclient
 # Install the bash completion for OpenStack command
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
-# Backup the origin file
-if [ -f "/etc/keystone/keystone.conf" ]
-then
-	echo "The backup keystone conf exist, do not thing."
-else
-	echo "Backup the keystone conf file."
-    cp -af keystone.conf /etc/keystone/keystone.conf
-    cp -a /etc/keystone/keystone.conf /etc/keystone/keystone.conf.bk
-fi
-
-cp -af keystone.conf /etc/keystone/keystone.conf
-
+cp -af /root/openstack/server/controller/service/keystone/keystone.conf /etc/keystone/keystone.conf
 
 :'
 [database]
@@ -46,7 +35,7 @@ keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
 --bootstrap-region-id RegionOne
 
 # Apache service
-cp -af apache2.conf /etc/apache2/apache2.conf
+cp /root/openstack/server/controller/service/keystone/apache2.conf /etc/apache2/apache2.conf
 :'
 # 57 ServerName controller
 '
@@ -68,13 +57,13 @@ openstack project create service --domain default --description "Service Project
 openstack project create demo --domain default --description "Demo Project"
 
 echo 'The next answer is "DEMO_PASS"'
-openstack user create demo --domain default --password-prompt
+openstack user create demo --domain default --password DEMO_PASS
 openstack role create user
 openstack role add user --project demo --user demo
 
 unset OS_USERNAME OS_PASSWORD OS_AUTH_URL
 
-cat << EOF > /root/admin-openrc
+cat << EOF > /root/openstack/admin-openrc
 export OS_PROJECT_DOMAIN_NAME=Default
 export OS_USER_DOMAIN_NAME=Default
 export OS_PROJECT_NAME=admin
@@ -110,7 +99,7 @@ source /root/admin-openrc
 ## Image service ##
 # Create user glance on keystone
 echo 'The glance user password is "GLANCE_PASS"'
-openstack user create glance --domain default --password-prompt
+openstack user create glance --domain default --password GLANCE_PASS
 # Add  role admin to project service and user glance on keystone
 openstack role add admin --project service --user glance
 # Create image service (glance) on keystone
