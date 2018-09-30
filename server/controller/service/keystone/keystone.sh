@@ -1,7 +1,7 @@
 # Controller - Keystone Service
 
 # Install Keystone service
-apt install -y keystone apache2 libapache2-mod-wsgi python-openstackclient
+apt install -y keystone apache2libap ache2-mod-wsgi python-openstackclient
 
 # Install the bash completion for OpenStack command
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
