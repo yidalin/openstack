@@ -10,3 +10,8 @@ cp -af /root/openstack/server.network/service.neutron/linuxbridge_agent.ini.no-c
 cp -af /root/openstack/server.network/service.neutron/l3_agent.ini.no-comment /etc/neutron/l3_agent.ini
 cp -af /root/openstack/server.network/service.neutron/dhcp_agent.ini.no-comment /etc/neutron/dhcp_agent.ini
 cp -af /root/openstack/server.network/service.neutron/metadata_agent.ini.no-comment /etc/neutron/metadata_agent.ini
+
+systemctl restart neutron-linuxbridge-agent.service
+systemctl restart neutron-dhcp-agent.service
+systemctl restart neutron-metadata-agent.service
+systemctl restart neutron-l3-agent.service

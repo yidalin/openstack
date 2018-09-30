@@ -63,7 +63,7 @@ openstack role add user --project demo --user demo
 
 unset OS_USERNAME OS_PASSWORD OS_AUTH_URL
 
-cat << EOF > /root/openstack/admin-openrc
+cat << EOF > /root/admin-openrc
 export OS_PROJECT_DOMAIN_NAME=Default
 export OS_USER_DOMAIN_NAME=Default
 export OS_PROJECT_NAME=admin
@@ -115,13 +115,13 @@ echo 'The nova user password is "NOVA_PASS"'
 #openstack user create nova --domain default --password-prompt
 openstack user create nova --domain default --password NOVA_PASS
 # Add  role admin to project service and user nova on keystone
-openstack role add admin --project service --user nova
+openstack role add --project service --user nova admin
 # Create compute service (nova) on keystone
 openstack service create compute --name nova --description "OpenStack Compute Service"
 # Create endpoint public, internal, admin on keystone
-openstack endpoint create compute --region RegionOne public http://controller:8774/v2.1
-openstack endpoint create compute --region RegionOne internal http://controller:8774/v2.1
-openstack endpoint create compute --region RegionOne admin http://controller:8774/v2.1
+openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1
+openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1
+openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1
 
 # Create user placement on keystone
 echo 'The placement user password is "PLACEMENT_PASS"'

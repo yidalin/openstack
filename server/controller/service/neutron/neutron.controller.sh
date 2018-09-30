@@ -14,7 +14,7 @@ systemctl restart neutron-server.service
 # Cteate ext-net external network (flat)
 openstack network create ext-net --external --provider-physical-network external --provider-network-type flat
 # Create a subnet for ext-net
-
+openstack subnet create ext-subnet --network ext-net --subnet-range 192.168.9.0/24 --allocation-pool start=192.168.9.220,end=192.168.9.240 --no-dhcp --gateway 192.168.9.254
 
 # Use demo account
 openstack network create demo-net
