@@ -1,0 +1,14 @@
+TARGETS = uuidd lxd lvm2-lvmpolld open-vm-tools lxcfs lvm2-lvmetad unattended-upgrades ipvsadm ebtables neutron-server neutron-metadata-agent keepalived atd neutron-linuxbridge-cleanup neutron-dhcp-agent irqbalance haproxy mdadm radvd neutron-l3-agent resolvconf chrony ufw neutron-linuxbridge-agent plymouth urandom open-iscsi iscsid sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs cryptdisks cryptdisks-early umountroot mdadm-waitidle halt reboot
+iscsid: open-iscsi
+sendsigs: uuidd lxd neutron-server neutron-metadata-agent iscsid open-vm-tools plymouth keepalived lxcfs atd neutron-linuxbridge-agent neutron-dhcp-agent irqbalance haproxy mdadm radvd neutron-linuxbridge-cleanup neutron-l3-agent unattended-upgrades open-iscsi chrony
+rsyslog: neutron-server keepalived atd sendsigs irqbalance haproxy mdadm radvd chrony
+umountnfs.sh: uuidd lxd neutron-server neutron-metadata-agent open-vm-tools plymouth keepalived lxcfs atd rsyslog neutron-linuxbridge-agent neutron-dhcp-agent irqbalance haproxy radvd neutron-linuxbridge-cleanup neutron-l3-agent sendsigs unattended-upgrades chrony
+hwclock.sh: uuidd atd rsyslog chrony
+networking: iscsid keepalived umountnfs.sh haproxy radvd open-iscsi chrony ipvsadm
+umountfs: uuidd lxd ebtables neutron-server urandom neutron-metadata-agent lvm2-lvmpolld iscsid open-vm-tools plymouth keepalived umountnfs.sh lxcfs lvm2-lvmetad atd neutron-linuxbridge-agent neutron-dhcp-agent irqbalance haproxy mdadm networking radvd neutron-linuxbridge-cleanup hwclock.sh neutron-l3-agent unattended-upgrades open-iscsi resolvconf chrony
+cryptdisks: umountfs
+cryptdisks-early: cryptdisks umountfs
+umountroot: cryptdisks umountfs cryptdisks-early
+mdadm-waitidle: umountroot
+halt: mdadm-waitidle umountroot
+reboot: mdadm-waitidle umountroot
