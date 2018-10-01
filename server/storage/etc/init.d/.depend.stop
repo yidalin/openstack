@@ -1,0 +1,14 @@
+TARGETS = uuidd lxd lvm2-lvmpolld open-vm-tools lxcfs lvm2-lvmetad unattended-upgrades atd tgt irqbalance mdadm resolvconf chrony ufw cinder-volume plymouth urandom open-iscsi iscsid sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs cryptdisks cryptdisks-early umountroot mdadm-waitidle halt reboot
+iscsid: open-iscsi
+sendsigs: uuidd lxd iscsid open-vm-tools plymouth lxcfs atd tgt irqbalance mdadm unattended-upgrades open-iscsi chrony cinder-volume
+rsyslog: atd sendsigs tgt irqbalance mdadm chrony
+umountnfs.sh: uuidd lxd open-vm-tools plymouth lxcfs atd rsyslog tgt irqbalance sendsigs unattended-upgrades chrony cinder-volume
+hwclock.sh: uuidd atd rsyslog chrony
+networking: iscsid umountnfs.sh open-iscsi chrony
+umountfs: uuidd lxd urandom lvm2-lvmpolld iscsid open-vm-tools plymouth umountnfs.sh lxcfs lvm2-lvmetad atd tgt irqbalance mdadm networking hwclock.sh unattended-upgrades open-iscsi resolvconf chrony cinder-volume
+cryptdisks: umountfs
+cryptdisks-early: cryptdisks umountfs
+umountroot: cryptdisks umountfs cryptdisks-early
+mdadm-waitidle: umountroot
+halt: mdadm-waitidle umountroot
+reboot: mdadm-waitidle umountroot
