@@ -5,7 +5,7 @@ sudo apt install -y nova-api nova-conductor nova-consoleauth \
 nova-novncproxy nova-scheduler nova-placement-api 
 
 # Replace the nova conf
-cp -af nova.conf.no-comment /etc/nova/nova.conf
+cp -f etc/nova/nova.conf /etc/nova/nova.conf
 
 # Sync the nova-api database by nova-manage (Create tables, schema...)
 # Log: /var/log/nova/nova-manage.log
