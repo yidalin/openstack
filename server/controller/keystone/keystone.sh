@@ -6,7 +6,7 @@ apt install -y keystone apache2libap ache2-mod-wsgi python-openstackclient
 # Install the bash completion for OpenStack command
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
-cp -af /root/openstack/server/controller/service/keystone/keystone.conf /etc/keystone/keystone.conf
+cp -f etc/keystone/keystone.conf /etc/keystone/keystone.conf
 
 :'
 [database]

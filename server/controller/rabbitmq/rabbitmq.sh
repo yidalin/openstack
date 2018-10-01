@@ -12,6 +12,3 @@ rabbitmqctl add_user openstack RABBIT_PASS
 # Configure the permission for the user openstack
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 
-systemctl status rabbitmq-server.service
-#systemctl enable rabbitmq-server.service
-#systemctl restart rabbitmq-server.service
