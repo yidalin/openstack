@@ -1,0 +1,16 @@
+TARGETS = uuidd lxd lvm2-lvmpolld open-vm-tools lxcfs lvm2-lvmetad unattended-upgrades ebtables atd irqbalance mdadm neutron-linuxbridge-cleanup resolvconf chrony ufw neutron-linuxbridge-agent libvirt-guests nova-compute plymouth urandom open-iscsi libvirtd iscsid virtlogd sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs cryptdisks cryptdisks-early umountroot mdadm-waitidle halt reboot
+libvirtd: libvirt-guests nova-compute
+iscsid: open-iscsi
+virtlogd: libvirtd
+sendsigs: uuidd lxd libvirt-guests virtlogd libvirtd iscsid open-vm-tools plymouth lxcfs atd nova-compute irqbalance mdadm neutron-linuxbridge-cleanup unattended-upgrades open-iscsi chrony neutron-linuxbridge-agent
+rsyslog: virtlogd libvirtd sendsigs atd irqbalance mdadm chrony
+umountnfs.sh: uuidd lxd sendsigs libvirt-guests virtlogd libvirtd open-vm-tools plymouth rsyslog lxcfs atd nova-compute irqbalance neutron-linuxbridge-cleanup unattended-upgrades chrony neutron-linuxbridge-agent
+hwclock.sh: uuidd rsyslog atd chrony
+networking: iscsid umountnfs.sh open-iscsi chrony
+umountfs: uuidd lxd libvirt-guests ebtables virtlogd libvirtd urandom lvm2-lvmpolld iscsid open-vm-tools umountnfs.sh plymouth lxcfs lvm2-lvmetad networking atd nova-compute irqbalance mdadm neutron-linuxbridge-cleanup hwclock.sh unattended-upgrades open-iscsi resolvconf chrony neutron-linuxbridge-agent
+cryptdisks: umountfs
+cryptdisks-early: cryptdisks umountfs
+umountroot: cryptdisks cryptdisks-early umountfs
+mdadm-waitidle: umountroot
+halt: mdadm-waitidle umountroot
+reboot: mdadm-waitidle umountroot
