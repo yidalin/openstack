@@ -1,0 +1,17 @@
+TARGETS = apache-htcacheclean uuidd lxd lvm2-lvmpolld open-vm-tools lxcfs lvm2-lvmetad unattended-upgrades apache2 resolvconf ufw memcached atd irqbalance mdadm chrony glance-api nova-conductor nova-scheduler nova-api glance-registry cinder-scheduler neutron-server nova-novncproxy plymouth urandom open-iscsi nova-consoleauth iscsid rabbitmq-server mysql sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs cryptdisks cryptdisks-early umountroot mdadm-waitidle halt reboot
+nova-consoleauth: nova-novncproxy
+iscsid: open-iscsi
+rabbitmq-server: glance-api nova-conductor nova-api glance-registry nova-consoleauth cinder-scheduler neutron-server
+mysql: glance-api nova-conductor nova-scheduler nova-api glance-registry nova-consoleauth cinder-scheduler neutron-server
+sendsigs: uuidd lxd rabbitmq-server memcached apache2 glance-api iscsid open-vm-tools plymouth nova-conductor lxcfs atd nova-scheduler irqbalance mysql nova-api mdadm apache-htcacheclean nova-novncproxy glance-registry nova-consoleauth unattended-upgrades cinder-scheduler open-iscsi chrony neutron-server
+rsyslog: memcached apache2 sendsigs atd irqbalance mysql mdadm apache-htcacheclean chrony neutron-server
+umountnfs.sh: uuidd lxd sendsigs rabbitmq-server memcached apache2 glance-api open-vm-tools plymouth nova-conductor rsyslog lxcfs atd nova-scheduler irqbalance mysql nova-api apache-htcacheclean nova-novncproxy glance-registry nova-consoleauth unattended-upgrades cinder-scheduler chrony neutron-server
+hwclock.sh: uuidd rsyslog atd mysql chrony
+networking: rabbitmq-server apache2 iscsid umountnfs.sh mysql open-iscsi chrony
+umountfs: uuidd lxd rabbitmq-server memcached apache2 glance-api urandom lvm2-lvmpolld iscsid open-vm-tools umountnfs.sh plymouth nova-conductor lxcfs lvm2-lvmetad networking atd nova-scheduler irqbalance mysql nova-api mdadm apache-htcacheclean nova-novncproxy hwclock.sh glance-registry nova-consoleauth unattended-upgrades cinder-scheduler open-iscsi resolvconf chrony neutron-server
+cryptdisks: umountfs
+cryptdisks-early: cryptdisks umountfs
+umountroot: cryptdisks cryptdisks-early umountfs
+mdadm-waitidle: umountroot
+halt: mdadm-waitidle umountroot
+reboot: mdadm-waitidle umountroot
