@@ -1,3 +1,4 @@
+#!/bin/sh
 # OpenStack > Controller - DB Service
 
 # Install MariaDB

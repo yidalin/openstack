@@ -1,3 +1,4 @@
+#!/bin/bash
 # This script shoud implement on controller server #
 
 # Install nova service components

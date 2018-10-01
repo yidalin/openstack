@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # OpenStack > Controller - memcache Service
 
 # Install memcache and python MQ

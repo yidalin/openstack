@@ -1,3 +1,4 @@
+#!/bin/bash
 # Controller - Glance
 
 # Install glance service

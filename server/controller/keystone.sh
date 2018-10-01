@@ -1,3 +1,4 @@
+#!/bin/bash
 # Controller - Keystone Service
 
 # Install Keystone service

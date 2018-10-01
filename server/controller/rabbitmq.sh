@@ -1,3 +1,4 @@
+#!/bin/bash
 # OpenStack > Controller - RabbitMQ Service
 
 # Install RabbitMQ service

@@ -1,3 +1,4 @@
+#!/bin/bash
 ## Implement on storage server
 
 # Install LVM function

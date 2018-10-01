@@ -1,3 +1,4 @@
+#!/bin/bash
 ## Implement on neutron server
 
 # Install neutron layer 2 and layer 3 component
