@@ -1,12 +1,12 @@
 # Controller - Keystone Service
 
 # Install Keystone service
-apt install -y keystone apache2libap ache2-mod-wsgi python-openstackclient
+apt install -y keystone apache2 libapache2-mod-wsgi python-openstackclient
 
 # Install the bash completion for OpenStack command
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
-cp -f etc/keystone/keystone.conf /etc/keystone/keystone.conf
+cp -if etc/keystone/keystone.conf /etc/keystone/keystone.conf
 
 :'
 [database]
@@ -35,7 +35,7 @@ keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
 --bootstrap-region-id RegionOne
 
 # Apache service
-cp /root/openstack/server/controller/service/keystone/apache2.conf /etc/apache2/apache2.conf
+cp -f etc/apache2/apache2.conf /etc/apache2/apache2.conf
 :'
 # 57 ServerName controller
 '
@@ -94,11 +94,10 @@ unset OS_{IDENTITY_API_VERSION,IMAGE_API_VERSION}
 export PS1='\u@\h:\w\$ '
 EOF
 
-source /root/admin-openrc
+source ~/openstack/admin-openrc
 
-## Image service ##
+## Image service ## 
 # Create user glance on keystone
-echo 'The glance user password is "GLANCE_PASS"'
 openstack user create glance --domain default --password GLANCE_PASS
 # Add  role admin to project service and user glance on keystone
 openstack role add admin --project service --user glance

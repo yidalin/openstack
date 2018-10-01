@@ -1,9 +1,10 @@
 # Controller - Glance
 
-source ./admin-openrc
-
 # Install glance service
 apt install -y glance
+
+cp -f etc/glance/glance-api.conf /etc/glance/glance-api.conf
+cp -f etc/glance/glance-registry.conf /etc/glance/glance-registry.conf
 
 :'
 # Modify the glance-api conf
