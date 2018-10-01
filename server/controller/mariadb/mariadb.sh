@@ -4,8 +4,7 @@
 apt install -y mariadb-server python-pymysql
 
 # Create DB connection file
-cp -af /root/openstack/server/controller/service/database/99-openstack.cnf \
-/etc/mysql/mariadb.conf.d/99-openstack.cnf
+cp -f ./etc/mysql/mariadb.conf.d/99-openstack.cnf /etc/mysql/mariadb.conf.d/99-openstack.cnf 
 
 : '
 cat << EOF > /etc/mysql/mariadb.conf.d/99-openstack.cnf
@@ -34,20 +33,21 @@ DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOFMYSQL
 
-
-# Create database and its account for each service
+# Create Keystone database
 mysql -u root << EOFMYSQL
 CREATE DATABASE keystone;
 GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'KEYSTONE_DBPASS';
 GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
 EOFMYSQL
 
+# Create Glance database
 mysql -u root << EOFMYSQL
 CREATE DATABASE glance;
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'GLANCE_DBPASS';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'GLANCE_DBPASS';
 EOFMYSQL
 
+# Create Nova database
 mysql -u root << EOFMYSQL
 CREATE DATABASE nova_api;
 GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
@@ -60,16 +60,16 @@ GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_D
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
 EOFMYSQL
 
+# Create Cinder database
 mysql -u root << EOFMYSQL
 CREATE DATABASE cinder;
 GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' IDENTIFIED BY 'CINDER_DBPASS';
 GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'CINDER_DBPASS';
 EOFMYSQL
 
-
+# Create Neutron database
 mysql -u root << EOFMYSQL
 CREATE DATABASE neutron;
 GRANT ALL PRIVILEGES on neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'NEUTRON_DBPASS';
 GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'NEUTRON_DBPASS';
 EOFMYSQL
-
