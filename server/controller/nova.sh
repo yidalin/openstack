@@ -59,5 +59,6 @@ source admin-openrc
 
 
 # After deploy neutron server
-cp -ai nova.conf.no-comment /etc/nova/nova.conf
+cp -f etc/nova/nova.conf /etc/nova/nova.conf
 systemctl restart nova-api.service
+systemctl restart apache2

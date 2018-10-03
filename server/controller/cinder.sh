@@ -4,7 +4,7 @@
 apt install -y cinder-api cinder-scheduler
 
 # Replace the cinder config
-cp -af cinder.conf.no-comment /etc/cinder/cinder.conf
+cp -f etc/cinder/cinder.conf /etc/cinder/cinder.conf
 
 # Sync database by cinder-manage (Create tables, schema and some initial data...)
 cinder-manage db sync

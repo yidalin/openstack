@@ -7,7 +7,7 @@ apt install -y keystone apache2 libapache2-mod-wsgi python-openstackclient
 # Install the bash completion for OpenStack command
 openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
 
-cp -if etc/keystone/keystone.conf /etc/keystone/keystone.conf
+cp -f etc/keystone/keystone.conf /etc/keystone/keystone.conf
 
 :'
 [database]
@@ -60,7 +60,7 @@ openstack project create demo --domain default --description "Demo Project"
 echo 'The next answer is "DEMO_PASS"'
 openstack user create demo --domain default --password DEMO_PASS
 openstack role create user
-openstack role add user --project demo --user demo
+openstack role add --project demo --user demo user
 
 unset OS_USERNAME OS_PASSWORD OS_AUTH_URL
 
@@ -111,7 +111,6 @@ openstack endpoint create image --region RegionOne admin http://controller:9292
 
 ## Compute service ##
 # Create user nova on keystone
-echo 'The nova user password is "NOVA_PASS"'
 #openstack user create nova --domain default --password-prompt
 openstack user create nova --domain default --password NOVA_PASS
 # Add  role admin to project service and user nova on keystone
@@ -124,7 +123,6 @@ openstack endpoint create --region RegionOne compute internal http://controller:
 openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1
 
 # Create user placement on keystone
-echo 'The placement user password is "PLACEMENT_PASS"'
 #openstack user create placement --domain default --password-prompt
 openstack user create placement --domain default --password PLACEMENT_PASS
 # Add  role admin to project service and user placement on keystone
@@ -137,7 +135,6 @@ openstack endpoint create placement --region RegionOne internal http://controlle
 openstack endpoint create placement --region RegionOne admin http://controller:8778
 
 # Create user cinder on keystone
-echo 'The cinder user password is "CINDER_PASS"'
 #openstack user create cinder --domain default --password-prompt
 openstack user create cinder --domain default --password CINDER_PASS
 # Add  role admin to project service and user cinder on keystone
@@ -156,7 +153,6 @@ openstack endpoint create --region RegionOne volumev3 internal http://controller
 openstack endpoint create --region RegionOne volumev3 admin http://controller:8776/v3/%\(project_id\)s
 
 # Create user neutron on keystone
-echo 'The neutron user password is "NEUTRON_PASS"'
 #openstack user create neutron --domain default --password-prompt
 openstack user create neutron --domain default --password NEUTRON_PASS
 # Add  role admin to project service and user neutron on keystone
