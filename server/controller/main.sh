@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./mariadb-test.sh
+bash ./mariadb-test.sh
