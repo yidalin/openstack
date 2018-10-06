@@ -19,6 +19,8 @@ cp -f etc/keystone/keystone.conf /etc/keystone/keystone.conf
 2934 provider = fernet
 '
 
+exit
+
 # Synchronizing the database
 keystone-manage db_sync
 
