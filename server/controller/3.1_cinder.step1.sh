@@ -20,5 +20,3 @@ systemctl restart cinder-scheduler.service
 
 # Restart apache service for cinder-api
 systemctl restart apache2.service
-
-openstack volume create --size 1 --description "Demo's volume" demoVol
