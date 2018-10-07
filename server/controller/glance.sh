@@ -16,6 +16,9 @@ systemctl restart glance-api.service
 
 # Upload image (Cirros) to glance service (controller)
 wget http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+
+source ~/admin-openrc
+
 openstack image create "cirros" --file cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --public
 mv ./cirros-0.4.0-x86_64-disk.img ~
 openstack image list
