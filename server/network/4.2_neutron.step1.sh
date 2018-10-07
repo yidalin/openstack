@@ -8,8 +8,8 @@ neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent
 cp -f etc/neutron/neutron.conf /etc/neutron/neutron.conf
 cp -f etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugins/ml2/ml2_conf.ini
 
-read -n 1 -p "Press check the {physical_interface_mappings}"
-read -n 1 -p "Press check the {local_ip}"
+read -n 1 -p "Press check the {physical_interface_mappings} in the linuxbridge_agent.ini file"
+read -n 1 -p "Press check the {local_ip} in the linuxbridge_agent.ini file"
 
 cp -f etc/neutron/plugins/ml2/linuxbridge_agent.ini /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 cp -f etc/neutron/l3_agent.ini /etc/neutron/l3_agent.ini
