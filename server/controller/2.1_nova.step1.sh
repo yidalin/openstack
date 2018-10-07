@@ -1,6 +1,8 @@
 #!/bin/bash
 # This script shoud implement on controller server #
 
+read -n 1 -p "Please replace {my_ip} as the controller's IP address in the nova.conf"
+
 # Install nova service components
 sudo apt install -y nova-api nova-conductor nova-consoleauth \
 nova-novncproxy nova-scheduler nova-placement-api 

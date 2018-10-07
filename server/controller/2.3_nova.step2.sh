@@ -1,7 +1,6 @@
 #!/bin/bash
+# This script shoud implement on controller server #
 
-### Please implement after deployed nova compute server
-## Setting the Hypervisor
 source ~/admin-openrc
 
 # Check the hypervisor

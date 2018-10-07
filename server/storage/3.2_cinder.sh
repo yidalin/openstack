@@ -13,10 +13,6 @@ vgcreate cinder-volumes /dev/sdb
 # Modity the LVM config: /etc/lvm/lvm.conf (Only use /dev/sdb)
 
 cp -f etc/lvm/lvm.conf /etc/lvm/lvm.conf
-:'
-devices {
-    filter = [ "a/sdb/", "r/.*/" ]
-'
 
 # Install cinder packages
 apt install -y cinder-volume tgt
