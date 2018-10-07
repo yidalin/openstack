@@ -1,49 +1,4 @@
 #!/bin/bash
-# Controller - Keystone Service
-
-# Install Keystone service
-apt install -y keystone apache2 libapache2-mod-wsgi python-openstackclient
-
-# Install the bash completion for OpenStack command
-openstack complete | sudo tee /etc/bash_completion.d/osc.bash_completion > /dev/null
-
-cp -f etc/keystone/keystone.conf /etc/keystone/keystone.conf
-
-:'
-[database]
-# ...
-721 connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone
-
-[token]
-# ...
-2934 provider = fernet
-'
-
-exit
-
-# Synchronizing the database
-keystone-manage db_sync
-
-# Initializing the Fernet Key
-keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
-
-# Initializing credentials
-keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
-
-# Create the keystone service endpoing for admin auth
-keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
---bootstrap-admin-url http://controller:5000/v3 \
---bootstrap-internal-url http://controller:5000/v3 \
---bootstrap-public-url http://controller:5000/v3 \
---bootstrap-region-id RegionOne
-
-# Apache service
-cp -f etc/apache2/apache2.conf /etc/apache2/apache2.conf
-:'
-# 57 ServerName controller
-'
-
-systemctl restart apache2.service
 
 # Export the temporary environment variables
 export OS_USERNAME=admin
@@ -54,19 +9,17 @@ export OS_PROJECT_DOMAIN_NAME=Default
 export OS_AUTH_URL=http://controller:5000/v3/
 export OS_IDENTITY_API_VERSION=3
 
-
 # Create project (service, demo) on the keystone service
-openstack project create service --domain default --description "Service Project"
-openstack project create demo --domain default --description "Demo Project"
+openstack project create --domain default --description "Service Project" service
+openstack project create --domain default --description "Demo Project" demo
 
-echo 'The next answer is "DEMO_PASS"'
-openstack user create demo --domain default --password DEMO_PASS
+openstack user create --domain default --password DEMO_PASS demo
 openstack role create user
 openstack role add --project demo --user demo user
 
 unset OS_USERNAME OS_PASSWORD OS_AUTH_URL
 
-cat << EOF > /root/admin-openrc
+cat << EOF > ~/admin-openrc
 export OS_PROJECT_DOMAIN_NAME=Default
 export OS_USER_DOMAIN_NAME=Default
 export OS_PROJECT_NAME=admin
@@ -78,7 +31,7 @@ export OS_IMAGE_API_VERSION=2
 export PS1='\u(OS-ADMIN)@\h:\w\$ '
 EOF
 
-cat << EOF > /root/demo-openrc
+cat << EOF > ~/demo-openrc
 export OS_PROJECT_DOMAIN_NAME=Default
 export OS_USER_DOMAIN_NAME=Default
 export OS_PROJECT_NAME=demo
@@ -90,35 +43,35 @@ export OS_IMAGE_API_VERSION=2
 export PS1='\u(OS-DEMO)@\h:\w\$ '
 EOF
 
-cat << EOF > /root/none-openrc
+cat << EOF > ~/none-openrc
 unset OS_{PROJECT_DOMAIN_NAME,USER_DOMAIN_NAME,PROJECT_NAME,USERNAME}
 unset OS_{PASSWORD,AUTH_URL}
 unset OS_{IDENTITY_API_VERSION,IMAGE_API_VERSION}
 export PS1='\u@\h:\w\$ '
 EOF
 
-source ~/openstack/admin-openrc
+source ~/admin-openrc
 
 ## Image service ## 
 # Create user glance on keystone
-openstack user create glance --domain default --password GLANCE_PASS
+openstack user create --domain default --password GLANCE_PASS glance
 # Add  role admin to project service and user glance on keystone
-openstack role add admin --project service --user glance
+openstack role add --project service --user glance admin
 # Create image service (glance) on keystone
-openstack service create image --name glance --description "OpenStack Image Service"
+openstack service create --name glance --description "OpenStack Image Service" image
 # Create endpoint public, internal, admin on keystone
-openstack endpoint create image --region RegionOne public http://controller:9292
-openstack endpoint create image --region RegionOne internal http://controller:9292
-openstack endpoint create image --region RegionOne admin http://controller:9292
+openstack endpoint create --region RegionOne image public http://controller:9292
+openstack endpoint create --region RegionOne image internal http://controller:9292
+openstack endpoint create --region RegionOne image admin http://controller:9292
 
 ## Compute service ##
 # Create user nova on keystone
 #openstack user create nova --domain default --password-prompt
-openstack user create nova --domain default --password NOVA_PASS
+openstack user create --domain default --password NOVA_PASS nova
 # Add  role admin to project service and user nova on keystone
 openstack role add --project service --user nova admin
 # Create compute service (nova) on keystone
-openstack service create compute --name nova --description "OpenStack Compute Service"
+openstack service create --name nova --description "OpenStack Compute Service" compute
 # Create endpoint public, internal, admin on keystone
 openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1
 openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1
@@ -126,25 +79,24 @@ openstack endpoint create --region RegionOne compute admin http://controller:877
 
 # Create user placement on keystone
 #openstack user create placement --domain default --password-prompt
-openstack user create placement --domain default --password PLACEMENT_PASS
+openstack user create --domain default --password PLACEMENT_PASS placement
 # Add  role admin to project service and user placement on keystone
-openstack role add admin --project service --user placement
+openstack role add --project service --user placement admin
 # Create compute service (placement) on keystone
-openstack service create placement --name placement --description "OpenStack Placement API"
+openstack service create --name placement --description "OpenStack Placement API" placement
 # Create endpoint public, internal, admin on keystone
-openstack endpoint create placement --region RegionOne public http://controller:8778
-openstack endpoint create placement --region RegionOne internal http://controller:8778
-openstack endpoint create placement --region RegionOne admin http://controller:8778
+openstack endpoint create --region RegionOne placement public http://controller:8778
+openstack endpoint create --region RegionOne placement internal http://controller:8778
+openstack endpoint create --region RegionOne placement admin http://controller:8778
 
 # Create user cinder on keystone
 #openstack user create cinder --domain default --password-prompt
-openstack user create cinder --domain default --password CINDER_PASS
+openstack user create --domain default --password CINDER_PASS cinder
 # Add  role admin to project service and user cinder on keystone
-openstack role add admin --project service --user cinder
+openstack role add --project service --user cinder admin
 # Create block storage service (cinder) on keystone
-openstack service create volumev2 --name cinderv2 --description "OpenStack Block Storage"
-openstack service create volumev3 --name cinderv3 --description "OpenStack Block Storage"
-
+openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+openstack service create --name cinderv3 --description "OpenStack Block Storage" volumev3
 # Create endpoint public, internal, admin on keystone
 openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(project_id\)s
 openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(project_id\)s
@@ -156,12 +108,12 @@ openstack endpoint create --region RegionOne volumev3 admin http://controller:87
 
 # Create user neutron on keystone
 #openstack user create neutron --domain default --password-prompt
-openstack user create neutron --domain default --password NEUTRON_PASS
+openstack user create --domain default --password NEUTRON_PASS neutron
 # Add  role admin to project service and user neutron on keystone
-openstack role add admin --project service --user neutron
+openstack role add --project service --user neutron admin
 # Create network service (neutron) on keystone
-openstack service create network --name neutron --description "OpenStack Network Service"
+openstack service create --name neutron --description "OpenStack Network Service" network
 # Create endpoint public, internal, admin on keystone
-openstack endpoint create neutron --region RegionOne public http://controller:9696
-openstack endpoint create neutron --region RegionOne internal http://controller:9696
-openstack endpoint create neutron --region RegionOne admin http://controller:9696
+openstack endpoint create --region RegionOne neutron public http://controller:9696
+openstack endpoint create --region RegionOne neutron internal http://controller:9696
+openstack endpoint create --region RegionOne neutron admin http://controller:9696
