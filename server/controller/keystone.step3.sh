@@ -1,5 +1,5 @@
 #!/bin/bash
-source ~/admin-openrc
+source ./admin-openrc
 
 ## Image service ## 
 # Create user glance on keystone
