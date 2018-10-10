@@ -5,7 +5,7 @@
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
-192.168.123.11 controller
-192.168.123.21 compute1
-192.168.123.31 storage1
-192.168.123.41 network1
+192.168.212.91 controller
+192.168.212.92 compute
+192.168.212.93 storage
+192.168.212.94 network
